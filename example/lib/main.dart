@@ -30,7 +30,14 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: TimetableView(
         laneEventsList: _buildLaneEvents(),
-        timetableStyle: TimetableStyle(),
+        onEmptySlotTap: (int laneIndex, int start, int end) {
+          print("Clicked $laneIndex. Start: $start, End: $end");
+        },
+        timetableStyle: TimetableStyle(
+          laneWidth: 100,
+          visibleDecorationBorder: true,
+          timeItemWidth: 30,
+        ),
       ),
     );
   }
@@ -47,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           TableEvent(
             title: 'An event 2',
-            start: TableEventTime(hour: 12, minute: 0),
+            start: TableEventTime(hour: 10, minute: 0),
             end: TableEventTime(hour: 13, minute: 20),
           ),
         ],
@@ -57,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
         events: [
           TableEvent(
             title: 'An event 3',
-            start: TableEventTime(hour: 10, minute: 10),
+            start: TableEventTime(hour: 8, minute: 10),
             end: TableEventTime(hour: 11, minute: 45),
           ),
         ],
