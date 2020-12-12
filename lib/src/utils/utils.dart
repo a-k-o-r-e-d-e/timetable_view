@@ -40,6 +40,19 @@ class Utils {
     }
   }
 
+  static String formatHourIntoAmPM(int hour, int minute) {
+    String formattedString =
+        hour > 12 ? (hour - 12).toString() : hour.toString();
+
+    // if minute is 0, just display time as 12 Am, or 2 PM
+    if (minute > 0) {
+      formattedString += ":" + _addLeadingZero(minute);
+    }
+
+    formattedString += " ${hour > 12 ? "PM" : "AM"}";
+    return formattedString;
+  }
+
   static Widget eventText(
     TableEvent event,
     BuildContext context,
@@ -139,18 +152,5 @@ class Utils {
     );
 
     return true;
-  }
-
-  static String formatHourIntoAmPM(int hour, int minute) {
-    String formattedString = hour > 12 ? (hour - 12).toString() : hour
-        .toString();
-
-    // if minute is 0, just display time as 12 Am, or 2 PM
-    if (minute > 0) {
-      formattedString += ":" + _addLeadingZero(minute);
-    }
-
-    formattedString += " ${hour > 12 ? "PM" : "AM"}";
-    return formattedString;
   }
 }
