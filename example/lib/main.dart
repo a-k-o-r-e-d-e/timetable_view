@@ -30,8 +30,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: TimetableView(
         laneEventsList: _buildLaneEvents(),
-        onEmptySlotTap: (int laneIndex, int start, int end) {
-          print("Clicked $laneIndex. Start: $start, End: $end");
+        onEmptySlotTap:
+            (int laneIndex, TableEventTime start, TableEventTime end) {
+          print("Clicked $laneIndex. Start: ${start.hour}, End: ${end.hour}");
         },
         timetableStyle: TimetableStyle(
           laneWidth: 100,
