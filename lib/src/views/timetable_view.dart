@@ -30,6 +30,14 @@ class TimetableView extends StatefulWidget {
 
 class _TimetableViewState extends State<TimetableView>
     with TimetableViewController {
+  bool isEmptyCellTapped = false;
+
+  int tappedEmptyCellLaneIndex;
+
+  TableEventTime tappedEmptyCellStartTime;
+
+  TableEventTime tappedEmptyCellEndTime;
+
   @override
   void initState() {
     initController();
@@ -80,19 +88,35 @@ class _TimetableViewState extends State<TimetableView>
         verticalPixelsStreamController: verticalPixelsStream,
         onScroll: onScroll,
         maxWidth:
-            widget.laneEventsList.length * widget.timetableStyle.laneWidth,
+        widget.laneEventsList.length * widget.timetableStyle.laneWidth,
         maxHeight:
-            (widget.timetableStyle.endHour - widget.timetableStyle.startHour) *
-                widget.timetableStyle.timeItemHeight,
+        (widget.timetableStyle.endHour - widget.timetableStyle.startHour) *
+            widget.timetableStyle.timeItemHeight,
         child: IntrinsicHeight(
-          child: Row(
-            children: widget.laneEventsList.map((laneEvents) {
-              return LaneView(
-                  events: laneEvents.events,
-                  timetableStyle: widget.timetableStyle,
-                  index: widget.laneEventsList.indexOf(laneEvents),
-                  onEmptyCellTap: widget.onEmptySlotTap);
-            }).toList(),
+          child: Stack(
+            children: [
+              Row(
+                children: widget.laneEventsList.map((laneEvents) {
+                  return LaneView(
+                      events: laneEvents.events,
+                      timetableStyle: widget.timetableStyle,
+                      index: widget.laneEventsList.indexOf(laneEvents),
+                      onEmptyCellTap: (laneIndex, startTime, endTime) {
+                        setState(() {
+                          isEmptyCellTapped = true;
+                          tappedEmptyCellLaneIndex = laneIndex;
+                          tappedEmptyCellStartTime = startTime;
+                          tappedEmptyCellEndTime = endTime;
+                        });
+                      });
+                }).toList(),
+              ),
+              isEmptyCellTapped ? EmptyTimeSlot(
+                widget.timetableStyle, laneIndex: tappedEmptyCellLaneIndex,
+                start: tappedEmptyCellStartTime,
+                end: tappedEmptyCellEndTime,
+                onTap: widget.onEmptySlotTap,) : SizedBox(height: 0, width: 0,)
+            ],
           ),
         ),
       ),
@@ -113,8 +137,8 @@ class _TimetableViewState extends State<TimetableView>
         shrinkWrap: true,
         children: [
           for (var i = widget.timetableStyle.startHour;
-              i < widget.timetableStyle.endHour;
-              i += 1)
+          i < widget.timetableStyle.endHour;
+          i += 1)
             i
         ].map((hour) {
           return Container(
@@ -138,7 +162,7 @@ class _TimetableViewState extends State<TimetableView>
                 Utils.hourFormatter(
                     hour, 0, widget.timetableStyle.showTimeAsAMPM),
                 style:
-                    TextStyle(color: widget.timetableStyle.timeItemTextColor),
+                TextStyle(color: widget.timetableStyle.timeItemTextColor),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -177,5 +201,59 @@ class _TimetableViewState extends State<TimetableView>
         }).toList(),
       ),
     );
+  }
+}
+
+class EmptyTimeSlot extends StatelessWidget {
+  final TimetableStyle timetableStyle;
+  final int laneIndex;
+  final TableEventTime start;
+  final TableEventTime end;
+  final void Function(int laneIndex, TableEventTime start, TableEventTime end) onTap;
+
+  EmptyTimeSlot(this.timetableStyle,
+      {this.laneIndex, this.start, this.end,
+        @required this.onTap
+      });
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: top(),
+      height: height(),
+      left: (timetableStyle.laneWidth * laneIndex),
+      width: timetableStyle.laneWidth,
+      child: GestureDetector(
+        onTap: () {
+          onTap(laneIndex, start, end);
+        },
+        child: Opacity(
+          opacity: 0.5,
+          child: Container(
+            decoration: BoxDecoration(color: Colors.blue),
+            margin: const EdgeInsets.all(1),
+            padding: const EdgeInsets.all(1),
+            child: Icon(Icons.add, color: Colors.white,),
+          ),
+        ),
+      ),
+    );
+  }
+
+  double top() {
+    return calculateTopOffset(
+        start.hour, start.minute, timetableStyle.timeItemHeight) -
+        (timetableStyle.startHour * timetableStyle.timeItemHeight);
+  }
+
+  double height() {
+    return calculateTopOffset(0, 60, timetableStyle.timeItemHeight) + 1;
+  }
+
+  double calculateTopOffset(int hour, [
+    int minute = 0,
+    double hourRowHeight,
+  ]) {
+    return (hour + (minute / 60)) * (hourRowHeight ?? 60);
   }
 }
