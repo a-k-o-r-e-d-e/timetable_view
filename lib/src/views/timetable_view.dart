@@ -230,10 +230,13 @@ class EmptyTimeSlot extends StatelessWidget {
         child: Opacity(
           opacity: 0.5,
           child: Container(
-            decoration: BoxDecoration(color: Colors.blue),
+            decoration: BoxDecoration(color: Theme.of(context).primaryColor),
             margin: const EdgeInsets.all(1),
             padding: const EdgeInsets.all(1),
-            child: Icon(Icons.add, color: Colors.white,),
+            child: Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
           ),
         ),
       ),
