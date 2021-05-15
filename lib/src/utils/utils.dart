@@ -41,15 +41,22 @@ class Utils {
   }
 
   static String formatHourIntoAmPM(int hour, int minute) {
-    String formattedString =
-        hour > 12 ? (hour - 12).toString() : hour.toString();
+    String formattedString = '';
+
+    // convert 0 Am to 12 Am
+    if (hour == 0) {
+      formattedString = "12";
+    } else {
+      formattedString = hour > 12 ? (hour - 12).toString() : hour.toString();
+    }
 
     // if minute is 0, just display time as 12 Am, or 2 PM
     if (minute > 0) {
       formattedString += ":" + _addLeadingZero(minute);
     }
 
-    formattedString += " ${hour > 12 ? "PM" : "AM"}";
+    formattedString += " ${hour >= 12 ? "PM" : "AM"}";
+
     return formattedString;
   }
 
@@ -64,13 +71,7 @@ class Utils {
         text: event.title,
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
-      TextSpan(
-        text: ' ' +
-            Utils.formatHourInto24Hours(event.start.hour, event.start.minute) +
-            ' - ' +
-            Utils.formatHourInto24Hours(event.end.hour, event.end.minute) +
-            '\n\n',
-      ),
+      TextSpan(text: event.location, style: TextStyle(color: Colors.white60)),
     ];
 
     bool exceedHeight;

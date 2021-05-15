@@ -4,6 +4,12 @@ import 'package:flutter_timetable_view/src/models/table_event_time.dart';
 class TableEvent {
   final String title;
 
+  /// Id to uniquely identify event. Used mainly in callbacks
+  final int eventId;
+
+  /// Optional. Preferably abbreviate string to less than 5 characters
+  final String location;
+
   final TableEventTime start;
 
   final TableEventTime end;
@@ -12,6 +18,7 @@ class TableEvent {
 
   final EdgeInsets margin;
 
+  //Todo:: Determine if Event ID needs to be passed to callback
   final void Function(
           int laneIndex, String title, TableEventTime start, TableEventTime end)
       onTap;
@@ -24,6 +31,8 @@ class TableEvent {
 
   TableEvent({
     @required this.title,
+    @required this.eventId,
+    this.location: '',
     @required this.start,
     @required this.end,
     this.padding: const EdgeInsets.all(10),

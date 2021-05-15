@@ -15,13 +15,18 @@ class TimetableView extends StatefulWidget {
   final void Function(int laneIndex, TableEventTime start, TableEventTime end)
       onEmptySlotTap;
 
-  TimetableView(
-      {Key key,
-      @required this.laneEventsList,
-      this.timetableStyle: const TimetableStyle(),
-      @required this.onEmptySlotTap})
-      : assert(laneEventsList != null),
+  /// Called when an event is tapped
+  final void Function(TableEvent sClass) onEventTap;
+
+  TimetableView({
+    Key key,
+    @required this.laneEventsList,
+    this.timetableStyle: const TimetableStyle(),
+    @required this.onEmptySlotTap,
+    @required this.onEventTap,
+  })  : assert(laneEventsList != null),
         assert(onEmptySlotTap != null),
+        assert(onEventTap != null),
         super(key: key);
 
   @override
@@ -88,19 +93,20 @@ class _TimetableViewState extends State<TimetableView>
         verticalPixelsStreamController: verticalPixelsStream,
         onScroll: onScroll,
         maxWidth:
-        widget.laneEventsList.length * widget.timetableStyle.laneWidth,
+            widget.laneEventsList.length * widget.timetableStyle.laneWidth,
         maxHeight:
-        (widget.timetableStyle.endHour - widget.timetableStyle.startHour) *
-            widget.timetableStyle.timeItemHeight,
+            (widget.timetableStyle.endHour - widget.timetableStyle.startHour) *
+                widget.timetableStyle.timeItemHeight,
         child: IntrinsicHeight(
           child: Stack(
             children: [
               Row(
-                children: widget.laneEventsList.map((laneEvents) {
+                children: widget.laneEventsList.map((laneEvent) {
                   return LaneView(
-                      events: laneEvents.events,
+                      events: laneEvent.events,
                       timetableStyle: widget.timetableStyle,
-                      index: widget.laneEventsList.indexOf(laneEvents),
+                      index: widget.laneEventsList.indexOf(laneEvent),
+                      onEventTap: widget.onEventTap,
                       onEmptyCellTap: (laneIndex, startTime, endTime) {
                         setState(() {
                           isEmptyCellTapped = true;
@@ -111,12 +117,79 @@ class _TimetableViewState extends State<TimetableView>
                       });
                 }).toList(),
               ),
-              isEmptyCellTapped ? EmptyTimeSlot(
-                widget.timetableStyle, laneIndex: tappedEmptyCellLaneIndex,
-                start: tappedEmptyCellStartTime,
-                end: tappedEmptyCellEndTime,
-                onTap: widget.onEmptySlotTap,) : SizedBox(height: 0, width: 0,)
+              isEmptyCellTapped
+                  ? _buildEmptyTimeSlot(
+                      tappedEmptyCellLaneIndex,
+                      tappedEmptyCellStartTime,
+                      tappedEmptyCellEndTime,
+                    )
+                  // EmptyTimeSlot(
+                  //   widget.timetableStyle,
+                  //         dayOfWeek: tappedEmptyCellDayOfWeek,
+                  //         laneIndex: tappedEmptyCellLaneIndex,
+                  //         start: tappedEmptyCellStartTime,
+                  //         end: tappedEmptyCellEndTime,
+                  //         onTap: widget.onEmptySlotTap,
+                  //       )
+                  : SizedBox(
+                      height: 0,
+                      width: 0,
+                    )
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  _buildEmptyTimeSlot(
+    // final TimetableStyle timetableStyle,
+    final int laneIndex,
+    final TableEventTime start,
+    final TableEventTime end,
+  ) {
+    double calculateTopOffset(
+      int hour, [
+      int minute = 0,
+      double hourRowHeight,
+    ]) {
+      return (hour + (minute / 60)) * (hourRowHeight ?? 60);
+    }
+
+    double top() {
+      return calculateTopOffset(
+              start.hour, start.minute, widget.timetableStyle.timeItemHeight) -
+          (widget.timetableStyle.startHour *
+              widget.timetableStyle.timeItemHeight);
+    }
+
+    double height() {
+      return calculateTopOffset(0, 60, widget.timetableStyle.timeItemHeight) +
+          1;
+    }
+
+    return Positioned(
+      top: top(),
+      height: height(),
+      left: (widget.timetableStyle.laneWidth * laneIndex),
+      width: widget.timetableStyle.laneWidth,
+      child: GestureDetector(
+        onTap: () {
+          widget.onEmptySlotTap(laneIndex, start, end);
+          setState(() {
+            isEmptyCellTapped = false;
+          });
+        },
+        child: Opacity(
+          opacity: 0.5,
+          child: Container(
+            decoration: BoxDecoration(color: Theme.of(context).accentColor),
+            margin: const EdgeInsets.all(1),
+            padding: const EdgeInsets.all(1),
+            child: Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
           ),
         ),
       ),
@@ -137,8 +210,8 @@ class _TimetableViewState extends State<TimetableView>
         shrinkWrap: true,
         children: [
           for (var i = widget.timetableStyle.startHour;
-          i < widget.timetableStyle.endHour;
-          i += 1)
+              i < widget.timetableStyle.endHour;
+              i += 1)
             i
         ].map((hour) {
           return Container(
@@ -161,8 +234,10 @@ class _TimetableViewState extends State<TimetableView>
               child: Text(
                 Utils.hourFormatter(
                     hour, 0, widget.timetableStyle.showTimeAsAMPM),
-                style:
-                TextStyle(color: widget.timetableStyle.timeItemTextColor),
+                style: TextStyle(
+                    color: widget.timetableStyle.timeItemTextColor,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -209,12 +284,11 @@ class EmptyTimeSlot extends StatelessWidget {
   final int laneIndex;
   final TableEventTime start;
   final TableEventTime end;
-  final void Function(int laneIndex, TableEventTime start, TableEventTime end) onTap;
+  final void Function(int laneIndex, TableEventTime start, TableEventTime end)
+      onTap;
 
   EmptyTimeSlot(this.timetableStyle,
-      {this.laneIndex, this.start, this.end,
-        @required this.onTap
-      });
+      {this.laneIndex, this.start, this.end, @required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -245,7 +319,7 @@ class EmptyTimeSlot extends StatelessWidget {
 
   double top() {
     return calculateTopOffset(
-        start.hour, start.minute, timetableStyle.timeItemHeight) -
+            start.hour, start.minute, timetableStyle.timeItemHeight) -
         (timetableStyle.startHour * timetableStyle.timeItemHeight);
   }
 
@@ -253,7 +327,8 @@ class EmptyTimeSlot extends StatelessWidget {
     return calculateTopOffset(0, 60, timetableStyle.timeItemHeight) + 1;
   }
 
-  double calculateTopOffset(int hour, [
+  double calculateTopOffset(
+    int hour, [
     int minute = 0,
     double hourRowHeight,
   ]) {

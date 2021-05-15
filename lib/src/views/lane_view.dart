@@ -11,8 +11,12 @@ class LaneView extends StatelessWidget {
 
   /// Index is used to uniquely identify each lane
   final int index;
+
   final Function(int laneIndex, TableEventTime start, TableEventTime end)
       onEmptyCellTap;
+
+  /// Called when an event is tapped
+  final void Function(TableEvent event) onEventTap;
 
   const LaneView({
     Key key,
@@ -20,6 +24,7 @@ class LaneView extends StatelessWidget {
     @required this.timetableStyle,
     @required this.index,
     @required this.onEmptyCellTap,
+    @required this.onEventTap,
   })  : assert(events != null),
         assert(timetableStyle != null),
         assert(onEmptyCellTap != null),
@@ -53,6 +58,7 @@ class LaneView extends StatelessWidget {
           ..._buildEmptyTimeSlots(index),
           ...events.map((event) {
             return EventView(
+              onEventTap: onEventTap,
               event: event,
               timetableStyle: timetableStyle,
               laneIndex: index,
@@ -119,17 +125,18 @@ class _EmptyTimeSlot extends StatelessWidget {
 
   double top() {
     return calculateTopOffset(
-        start.hour, start.minute, timetableStyle.timeItemHeight) -
+            start.hour, start.minute, timetableStyle.timeItemHeight) -
         timetableStyle.startHour * timetableStyle.timeItemHeight;
   }
 
   double height() {
-    return calculateTopOffset(0, end
-        .difference(start)
-        .inMinutes, timetableStyle.timeItemHeight) + 1;
+    return calculateTopOffset(
+            0, end.difference(start).inMinutes, timetableStyle.timeItemHeight) +
+        1;
   }
 
-  double calculateTopOffset(int hour, [
+  double calculateTopOffset(
+    int hour, [
     int minute = 0,
     double hourRowHeight,
   ]) {
