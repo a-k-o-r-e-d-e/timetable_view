@@ -7,21 +7,24 @@ class TableEvent {
   /// Id to uniquely identify event. Used mainly in callbacks
   final int eventId;
 
+  /// Id to uniquely identify the lane an event falls under. Used mainly in callbacks
+  final int laneIndex;
+
   /// Optional. Preferably abbreviate string to less than 5 characters
   final String location;
 
-  final TableEventTime start;
+  final TableEventTime startTime;
 
-  final TableEventTime end;
+  final TableEventTime endTime;
 
   final EdgeInsets padding;
 
   final EdgeInsets margin;
 
-  //Todo:: Determine if Event ID needs to be passed to callback
-  final void Function(
-          int laneIndex, String title, TableEventTime start, TableEventTime end)
-      onTap;
+  // //Todo:: Determine if Event ID needs to be passed to callback
+  // final void Function(
+  //         int laneIndex, String title, TableEventTime start, TableEventTime end)
+  //     onTap;
 
   final BoxDecoration decoration;
 
@@ -32,17 +35,18 @@ class TableEvent {
   TableEvent({
     @required this.title,
     @required this.eventId,
+    @required this.laneIndex,
     this.location: '',
-    @required this.start,
-    @required this.end,
+    @required this.startTime,
+    @required this.endTime,
     this.padding: const EdgeInsets.all(10),
     this.margin: const EdgeInsets.all(1),
-    this.onTap,
+    // this.onTap,
     this.decoration,
     this.backgroundColor: const Color(0xCC2196F3),
     this.textStyle: const TextStyle(color: Colors.white),
   })  : assert(title != null),
-        assert(start != null),
-        assert(end != null),
-        assert(end.isAfter(start));
+        assert(startTime != null),
+        assert(endTime != null),
+        assert(endTime.isAfter(startTime));
 }

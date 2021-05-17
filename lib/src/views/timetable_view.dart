@@ -16,7 +16,7 @@ class TimetableView extends StatefulWidget {
       onEmptySlotTap;
 
   /// Called when an event is tapped
-  final void Function(TableEvent sClass) onEventTap;
+  final void Function(TableEvent event) onEventTap;
 
   TimetableView({
     Key key,

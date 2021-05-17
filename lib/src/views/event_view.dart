@@ -66,13 +66,15 @@ class EventView extends StatelessWidget {
   }
 
   double top() {
-    return calculateTopOffset(event.start.hour, event.start.minute,
+    return calculateTopOffset(event.startTime.hour, event.startTime.minute,
             timetableStyle.timeItemHeight) -
         timetableStyle.startHour * timetableStyle.timeItemHeight;
   }
 
   double height() {
-    return calculateTopOffset(0, event.end.difference(event.start).inMinutes,
+    return calculateTopOffset(
+            0,
+            event.endTime.difference(event.startTime).inMinutes,
             timetableStyle.timeItemHeight) +
         1;
   }
