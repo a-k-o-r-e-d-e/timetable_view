@@ -1,7 +1,7 @@
-name: flutter_timetable_view
+name: timetable_view
 description: Timetable Widget Package for for Flutter
-version: 0.2.0
-homepage: https://github.com/yamarkz
+version: 0.2.1
+homepage: https://github.com/lone-wolf17
 
 environment:
   sdk: ">=2.8.0 <3.0.0"

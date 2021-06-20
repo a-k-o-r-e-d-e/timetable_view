@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_timetable_view/flutter_timetable_view.dart';
-import 'package:flutter_timetable_view/src/models/lane_events.dart';
-import 'package:flutter_timetable_view/src/styles/timetable_style.dart';
-import 'package:flutter_timetable_view/src/utils/utils.dart';
-import 'package:flutter_timetable_view/src/views/controller/timetable_view_controller.dart';
-import 'package:flutter_timetable_view/src/views/diagonal_scroll_view.dart';
-import 'package:flutter_timetable_view/src/views/lane_view.dart';
+import 'package:timetable_view/flutter_timetable_view.dart';
+import 'package:timetable_view/src/models/lane_events.dart';
+import 'package:timetable_view/src/styles/timetable_style.dart';
+import 'package:timetable_view/src/utils/utils.dart';
+import 'package:timetable_view/src/views/controller/timetable_view_controller.dart';
+import 'package:timetable_view/src/views/diagonal_scroll_view.dart';
+import 'package:timetable_view/src/views/lane_view.dart';
 
 class TimetableView extends StatefulWidget {
   final List<LaneEvents> laneEventsList;

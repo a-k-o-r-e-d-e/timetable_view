@@ -1,9 +1,9 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_timetable_view/src/models/table_event.dart';
-import 'package:flutter_timetable_view/src/styles/timetable_style.dart';
-import 'package:flutter_timetable_view/src/utils/utils.dart';
+import 'package:timetable_view/src/models/table_event.dart';
+import 'package:timetable_view/src/styles/timetable_style.dart';
+import 'package:timetable_view/src/utils/utils.dart';
 
 class EventView extends StatelessWidget {
   final TableEvent event;

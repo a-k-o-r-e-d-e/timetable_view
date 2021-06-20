@@ -2,6 +2,9 @@
 
 Timetable Widget Package for Flutter
 
+This is a fork of [flutter_timetable_view](https://github.com/yamarkz/flutter_timetable_view) by [yamarkz](https://github.com/yamarkz). 
+ 
+
 # Features
 
 ## Image

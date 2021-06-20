@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_timetable_view/src/models/table_event.dart';
+import 'package:timetable_view/src/models/table_event.dart';
 
 class Utils {
   static bool sameDay(DateTime date, [DateTime target]) {

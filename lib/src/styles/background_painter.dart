@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_timetable_view/src/styles/timetable_style.dart';
+import 'package:timetable_view/src/styles/timetable_style.dart';
 
 class BackgroundPainter extends CustomPainter {
   final TimetableStyle timetableStyle;

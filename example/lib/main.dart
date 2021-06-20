@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_timetable_view/flutter_timetable_view.dart';
+import 'package:timetable_view/flutter_timetable_view.dart';
 
 void main() => runApp(MyApp());
 

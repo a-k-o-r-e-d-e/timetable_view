@@ -41,6 +41,7 @@ class TimetableStyle {
 
   final Alignment timeItemAlignment; // Aligns timeItem
 
+  /// If the time should be displayed as 24 hours or 12 hour (Am & PM)
   final bool showTimeAsAMPM;
 
   const TimetableStyle(
