@@ -1,4 +1,4 @@
-library flutter_timetable_view;
+library timetable_view;
 
 export 'src/models/lane.dart';
 export 'src/models/lane_events.dart';
