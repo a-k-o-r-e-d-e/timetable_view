@@ -6,6 +6,7 @@ This is a fork of [flutter_timetable_view](https://github.com/yamarkz/flutter_ti
  
 
 # Features
+* Null Safety
 
 ## Image
 

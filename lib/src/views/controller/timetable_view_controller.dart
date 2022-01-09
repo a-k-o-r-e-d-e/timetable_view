@@ -25,7 +25,7 @@ mixin TimetableViewController<T extends StatefulWidget> on State<T> {
     /// callback is used to ensure that Timetable scrolls down to display the current hour range
     /// Else Timetable will show start on whatever the first hour is, making the user scroll down all the time
     /// Feedback showed this is not a great user experience hence the need for this call back
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
       var now = DateTime.now();
       double value = (now.hour * 65).toDouble();
       verticalScrollController.jumpTo(value);

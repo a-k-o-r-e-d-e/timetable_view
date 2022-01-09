@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:timetable_view/src/models/lane_events.dart';
-import 'package:timetable_view/src/styles/timetable_style.dart';
 import 'package:timetable_view/src/utils/utils.dart';
 import 'package:timetable_view/src/views/controller/timetable_view_controller.dart';
 import 'package:timetable_view/src/views/diagonal_scroll_view.dart';
@@ -19,15 +17,12 @@ class TimetableView extends StatefulWidget {
   final void Function(TableEvent event) onEventTap;
 
   TimetableView({
-    Key key,
-    @required this.laneEventsList,
+    Key? key,
+    required this.laneEventsList,
     this.timetableStyle: const TimetableStyle(),
-    @required this.onEmptySlotTap,
-    @required this.onEventTap,
-  })  : assert(laneEventsList != null),
-        assert(onEmptySlotTap != null),
-        assert(onEventTap != null),
-        super(key: key);
+    required this.onEmptySlotTap,
+    required this.onEventTap,
+  })  : super(key: key);
 
   @override
   _TimetableViewState createState() => _TimetableViewState();
@@ -37,11 +32,11 @@ class _TimetableViewState extends State<TimetableView>
     with TimetableViewController {
   bool isEmptyCellTapped = false;
 
-  int tappedEmptyCellLaneIndex;
+  late int tappedEmptyCellLaneIndex;
 
-  TableEventTime tappedEmptyCellStartTime;
+  TableEventTime? tappedEmptyCellStartTime;
 
-  TableEventTime tappedEmptyCellEndTime;
+  TableEventTime? tappedEmptyCellEndTime;
 
   @override
   void initState() {
@@ -120,8 +115,8 @@ class _TimetableViewState extends State<TimetableView>
               isEmptyCellTapped
                   ? _buildEmptyTimeSlot(
                       tappedEmptyCellLaneIndex,
-                      tappedEmptyCellStartTime,
-                      tappedEmptyCellEndTime,
+                      tappedEmptyCellStartTime!,
+                      tappedEmptyCellEndTime!,
                     )
                   // EmptyTimeSlot(
                   //   widget.timetableStyle,
@@ -151,7 +146,7 @@ class _TimetableViewState extends State<TimetableView>
     double calculateTopOffset(
       int hour, [
       int minute = 0,
-      double hourRowHeight,
+      double? hourRowHeight,
     ]) {
       return (hour + (minute / 60)) * (hourRowHeight ?? 60);
     }
@@ -183,7 +178,7 @@ class _TimetableViewState extends State<TimetableView>
         child: Opacity(
           opacity: 0.5,
           child: Container(
-            decoration: BoxDecoration(color: Theme.of(context).accentColor),
+            decoration: BoxDecoration(color: Theme.of(context).colorScheme.secondary),
             margin: const EdgeInsets.all(1),
             padding: const EdgeInsets.all(1),
             child: Icon(
@@ -281,21 +276,21 @@ class _TimetableViewState extends State<TimetableView>
 
 class EmptyTimeSlot extends StatelessWidget {
   final TimetableStyle timetableStyle;
-  final int laneIndex;
-  final TableEventTime start;
-  final TableEventTime end;
-  final void Function(int laneIndex, TableEventTime start, TableEventTime end)
+  final int? laneIndex;
+  final TableEventTime? start;
+  final TableEventTime? end;
+  final void Function(int? laneIndex, TableEventTime? start, TableEventTime? end)
       onTap;
 
   EmptyTimeSlot(this.timetableStyle,
-      {this.laneIndex, this.start, this.end, @required this.onTap});
+      {this.laneIndex, this.start, this.end, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
       top: top(),
       height: height(),
-      left: (timetableStyle.laneWidth * laneIndex),
+      left: (timetableStyle.laneWidth * laneIndex!),
       width: timetableStyle.laneWidth,
       child: GestureDetector(
         onTap: () {
@@ -304,7 +299,7 @@ class EmptyTimeSlot extends StatelessWidget {
         child: Opacity(
           opacity: 0.5,
           child: Container(
-            decoration: BoxDecoration(color: Theme.of(context).accentColor),
+            decoration: BoxDecoration(color: Theme.of(context).colorScheme.secondary),
             margin: const EdgeInsets.all(1),
             padding: const EdgeInsets.all(1),
             child: Icon(
@@ -319,7 +314,7 @@ class EmptyTimeSlot extends StatelessWidget {
 
   double top() {
     return calculateTopOffset(
-            start.hour, start.minute, timetableStyle.timeItemHeight) -
+            start!.hour, start!.minute, timetableStyle.timeItemHeight) -
         (timetableStyle.startHour * timetableStyle.timeItemHeight);
   }
 
@@ -330,7 +325,7 @@ class EmptyTimeSlot extends StatelessWidget {
   double calculateTopOffset(
     int hour, [
     int minute = 0,
-    double hourRowHeight,
+    double? hourRowHeight,
   ]) {
     return (hour + (minute / 60)) * (hourRowHeight ?? 60);
   }

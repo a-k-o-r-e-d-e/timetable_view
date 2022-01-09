@@ -18,15 +18,12 @@ class EventView extends StatelessWidget {
   //TODO: Delete lane Index implementation
 
   const EventView(
-      {Key key,
-      @required this.event,
-      @required this.timetableStyle,
-      @required this.laneIndex,
-      @required this.onEventTap})
-      : assert(event != null),
-        assert(timetableStyle != null),
-        assert(laneIndex != null),
-        super(key: key);
+      {Key? key,
+      required this.event,
+      required this.timetableStyle,
+      required this.laneIndex,
+      required this.onEventTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +38,7 @@ class EventView extends StatelessWidget {
         },
         child: Container(
           decoration: event.decoration ??
-              (event.backgroundColor != null
-                  ? BoxDecoration(color: event.backgroundColor)
-                  : null),
+                  BoxDecoration(color: event.backgroundColor),
           margin: event.margin,
           padding: event.padding,
           child: (Utils.eventText)(
@@ -52,13 +47,13 @@ class EventView extends StatelessWidget {
             math.max(
                 0.0,
                 height() -
-                    (event.padding?.top ?? 0.0) -
-                    (event.padding?.bottom ?? 0.0)),
+                    (event.padding.top) -
+                    (event.padding.bottom)),
             math.max(
                 0.0,
                 timetableStyle.laneWidth -
-                    (event.padding?.left ?? 0.0) -
-                    (event.padding?.right ?? 0.0)),
+                    (event.padding.left) -
+                    (event.padding.right)),
           ),
         ),
       ),
@@ -82,7 +77,7 @@ class EventView extends StatelessWidget {
   double calculateTopOffset(
     int hour, [
     int minute = 0,
-    double hourRowHeight,
+    double? hourRowHeight,
   ]) {
     return (hour + (minute / 60)) * (hourRowHeight ?? 60);
   }

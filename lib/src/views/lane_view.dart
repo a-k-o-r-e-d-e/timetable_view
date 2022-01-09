@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:timetable_view/src/models/table_event.dart';
 import 'package:timetable_view/src/styles/background_painter.dart';
-import 'package:timetable_view/src/styles/timetable_style.dart';
 import 'package:timetable_view/src/views/event_view.dart';
 import 'package:timetable_view/timetable_view.dart';
 
@@ -19,16 +17,13 @@ class LaneView extends StatelessWidget {
   final void Function(TableEvent event) onEventTap;
 
   const LaneView({
-    Key key,
-    @required this.events,
-    @required this.timetableStyle,
-    @required this.index,
-    @required this.onEmptyCellTap,
-    @required this.onEventTap,
-  })  : assert(events != null),
-        assert(timetableStyle != null),
-        assert(onEmptyCellTap != null),
-        super(key: key);
+    Key? key,
+    required this.events,
+    required this.timetableStyle,
+    required this.index,
+    required this.onEmptyCellTap,
+    required this.onEventTap,
+  })  : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +76,7 @@ class LaneView extends StatelessWidget {
     // I don't know if this is performant but i cant think of something else for now
     for (int i = timetableStyle.startHour; i < timetableStyle.endHour; i++) {
       emptyTimeSlots.add(_EmptyTimeSlot(
-        timetableStyle,
+        timetableStyle: timetableStyle,
         laneIndex: laneIndex,
         onTap: onEmptyCellTap,
         start: TableEventTime(hour: i, minute: 0),
@@ -100,8 +95,8 @@ class _EmptyTimeSlot extends StatelessWidget {
   final TableEventTime end;
   final Function(int laneIndex, TableEventTime start, TableEventTime end) onTap;
 
-  _EmptyTimeSlot(this.timetableStyle,
-      {this.laneIndex, this.start, this.end, @required this.onTap});
+  _EmptyTimeSlot(
+      {required this.laneIndex, required this.start, required this.end, required this.onTap, required this.timetableStyle,});
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +133,7 @@ class _EmptyTimeSlot extends StatelessWidget {
   double calculateTopOffset(
     int hour, [
     int minute = 0,
-    double hourRowHeight,
+    double? hourRowHeight,
   ]) {
     return (hour + (minute / 60)) * (hourRowHeight ?? 60);
   }

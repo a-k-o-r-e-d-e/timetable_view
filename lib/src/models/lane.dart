@@ -17,11 +17,11 @@ class Lane {
   final TextStyle textStyle;
 
   Lane({
-    @required this.name,
-    @required this.laneIndex,
+    required this.name,
+    required this.laneIndex,
     this.height: 70,
     this.width: 300,
     this.backgroundColor: Colors.white,
     this.textStyle: const TextStyle(color: Colors.blue),
-  }) : assert(name != null);
+  });
 }

@@ -26,27 +26,24 @@ class TableEvent {
   //         int laneIndex, String title, TableEventTime start, TableEventTime end)
   //     onTap;
 
-  final BoxDecoration decoration;
+  final BoxDecoration? decoration;
 
   final Color backgroundColor;
 
   final TextStyle textStyle;
 
   TableEvent({
-    @required this.title,
-    @required this.eventId,
-    @required this.laneIndex,
+    required this.title,
+    required this.eventId,
+    required this.laneIndex,
     this.location: '',
-    @required this.startTime,
-    @required this.endTime,
+    required this.startTime,
+    required this.endTime,
     this.padding: const EdgeInsets.all(10),
     this.margin: const EdgeInsets.all(1),
     // this.onTap,
     this.decoration,
     this.backgroundColor: const Color(0xCC2196F3),
     this.textStyle: const TextStyle(color: Colors.white),
-  })  : assert(title != null),
-        assert(startTime != null),
-        assert(endTime != null),
-        assert(endTime.isAfter(startTime));
+  })  : assert(endTime.isAfter(startTime));
 }
